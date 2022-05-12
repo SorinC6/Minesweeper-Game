@@ -53,21 +53,8 @@ describe("Field Generator", () => {
         [bomb, bomb],
       ]);
     });
-    test("Case 1 2*2 fileds 50% probilility to be mine", () => {
-      expect(filedGenerator(2, 0.5)).toStrictEqual([
-        [bomb, bomb],
-        [empty, empty],
-      ]);
-    });
-    test("Case 1 4*4 fileds 50% probilility to be mine", () => {
-      expect(filedGenerator(4, 0.5)).toStrictEqual([
-        [bomb, bomb, bomb, bomb],
-        [bomb, bomb, bomb, bomb],
-        [empty, empty, empty, empty],
-        [empty, empty, empty, empty],
-      ]);
-    });
-    it(" CASE2 : 2*2 field with 50% probability", () => {
+
+    it("2*2 field with 50% probability", () => {
       const field = filedGenerator(2, 0.5);
       const flatField = field.flat();
 
