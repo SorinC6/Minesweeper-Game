@@ -1,3 +1,5 @@
+import { incrementNeibours } from "./CellManipulator";
+
 export type Cell = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export type Field = Cell[][];
 export type Coords = [number, number];
@@ -33,6 +35,7 @@ export const filedGenerator = (size: number, probability: number): Field => {
       }
       if (restCellsWithBombs / unprocessedCellsSize > Math.random()) {
         result[i][j] = CellState.bomb;
+        incrementNeibours([i, j], result);
         restCellsWithBombs--;
       }
       unprocessedCellsSize--;
