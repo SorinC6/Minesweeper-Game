@@ -19,7 +19,7 @@ export const emptyFieldGenerator = (
   return new Array(size).fill(null).map(() => new Array(size).fill(state));
 };
 
-export const filedGenerator = (size: number, probability: number): Field => {
+export const fieldGenerator = (size: number, probability: number): Field => {
   if (probability > 1 || probability < 0) {
     throw new Error("probability must be between 0 and 1");
   }

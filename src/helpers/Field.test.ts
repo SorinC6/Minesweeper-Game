@@ -1,6 +1,7 @@
-import { emptyFieldGenerator, filedGenerator, CellState } from "./Filed";
+import { emptyFieldGenerator, CellState, Cell, fieldGenerator } from "./Filed";
 
 const { empty, bomb, hidden } = CellState;
+const cellWithBombFilter = (cell: Cell) => cell === bomb;
 
 describe("Field Generator", () => {
   describe("Empty field generator function test", () => {
@@ -29,14 +30,14 @@ describe("Field Generator", () => {
   describe("simple cases", () => {
     test("Wrong decity on input", () => {
       const errorText = "probability must be between 0 and 1";
-      expect(() => filedGenerator(1, -1)).toThrow(errorText);
-      expect(() => filedGenerator(1, 2)).toThrow(errorText);
+      expect(() => fieldGenerator(1, -1)).toThrow(errorText);
+      expect(() => fieldGenerator(1, 2)).toThrow(errorText);
     });
     test("smallest possible field without mine", () => {
-      expect(filedGenerator(1, 0)).toStrictEqual([[empty]]);
+      expect(fieldGenerator(1, 0)).toStrictEqual([[empty]]);
     });
     test("big field without mine", () => {
-      expect(filedGenerator(5, 0)).toStrictEqual([
+      expect(fieldGenerator(5, 0)).toStrictEqual([
         [empty, empty, empty, empty, empty],
         [empty, empty, empty, empty, empty],
         [empty, empty, empty, empty, empty],
@@ -45,24 +46,27 @@ describe("Field Generator", () => {
       ]);
     });
     test("smallest possible field with mine", () => {
-      expect(filedGenerator(1, 1)).toStrictEqual([[bomb]]);
+      expect(fieldGenerator(1, 1)).toStrictEqual([[bomb]]);
     });
     test("2*2 fileds with mine", () => {
-      expect(filedGenerator(2, 1)).toStrictEqual([
+      expect(fieldGenerator(2, 1)).toStrictEqual([
         [bomb, bomb],
         [bomb, bomb],
       ]);
     });
 
-    it("2*2 field with 50% probability", () => {
-      const field = filedGenerator(2, 0.5);
+    it("2x2 field with 50% probability", () => {
+      const field = fieldGenerator(2, 0.5);
       const flatField = field.flat();
 
-      const cellWithBombs = flatField.filter((cell) => cell === bomb);
-      const emptyCell = flatField.filter((cell) => cell === empty);
+      console.table(field);
+      console.table(flatField);
 
-      expect(cellWithBombs).toHaveLength(2);
-      expect(emptyCell).toHaveLength(2);
+      const cellsWithBombs = flatField.filter(cellWithBombFilter);
+      const emptyCells = flatField.filter((cell: Cell) => cell === 2);
+
+      expect(cellsWithBombs).toHaveLength(2);
+      expect(emptyCells).toHaveLength(2);
     });
   });
 });

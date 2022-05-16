@@ -1,7 +1,12 @@
 import React, { FC } from "react";
+import Legend from "./components/Legend/Legend";
 
 const App = () => {
-    return <div>App Test G</div>;
-}
+  return (
+    <div>
+      <Legend />
+    </div>
+  );
+};
 
-export default App
+export default App;
