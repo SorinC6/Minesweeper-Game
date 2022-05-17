@@ -1,13 +1,13 @@
 import React from "react";
 
 import { Story, Meta } from "@storybook/react";
-import { Legend } from "./Legend";
+import { Legend, LegendProps } from "./Legend";
 
 export default {
   title: "Top/Legend",
   component: Legend,
 } as Meta;
 
-const Template: Story = (args) => <Legend {...args} />;
+const Template: Story<LegendProps> = (args) => <Legend {...args} />;
 
 export const GameLegend = Template.bind({});

@@ -1,10 +1,12 @@
 import React, { FC } from "react";
-import Legend from "./components/Legend/Legend";
+import { Top } from "./components/Top/Top";
 
 const App = () => {
   return (
     <div>
-      <Legend />
+      <Top feature="Flag" firstAction="ctrl" secondAction="click">
+        Minesweeper
+      </Top>
     </div>
   );
 };
