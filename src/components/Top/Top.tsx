@@ -1,7 +1,7 @@
-import React, { FC } from "react";
-import styled from "@emotion/styled";
-import { Legend, LegendProps } from "./Legend";
-import { GameName, GameNameProps } from "./GameName";
+import React, { FC } from 'react';
+import styled from '@emotion/styled';
+import { Legend, LegendProps } from './Legend';
+import { GameName, GameNameProps } from './GameName';
 
 export type TopComponentType = LegendProps & GameNameProps;
 

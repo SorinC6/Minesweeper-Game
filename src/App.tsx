@@ -1,7 +1,7 @@
-import React, { FC } from "react";
-import { Top } from "./components/Top/Top";
+import React, { FC } from 'react';
+import { Top } from './components/Top';
 
-const App = () => {
+const App: FC = () => {
   return (
     <div>
       <Top feature="Flag" firstAction="ctrl" secondAction="click">
