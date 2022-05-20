@@ -1,7 +1,7 @@
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
+import { Story } from '@storybook/react';
 
-import { Counter, CounterProps } from './counter';
+import { Counter, CounterProps } from './Counter';
 
 export default {
   title: 'Scoreboard/counter',
