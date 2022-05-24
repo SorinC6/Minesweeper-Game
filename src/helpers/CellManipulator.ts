@@ -1,9 +1,6 @@
-import { Cell, Coords, Field } from "./Filed";
+import { Cell, Coords, Field } from './Filed';
 
-export const getNeigboursItems = ([y, x]: Coords): Record<
-  string,
-  [number, number]
-> => {
+export const getNeigboursItems = ([y, x]: Coords): Record<string, [number, number]> => {
   return {
     top: [y - 1, x],
     topRight: [y - 1, x + 1],
