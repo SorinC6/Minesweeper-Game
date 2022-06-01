@@ -24,7 +24,7 @@ export interface CellProps {
 export const Cell: FC<CellProps> = ({ children }) => {
   switch (children) {
     case CellState.empty:
-      return <EmptyFrame />;
+      return <RevealedFrame />;
     case CellState.bomb:
       return (
         <BombFrame>
@@ -46,7 +46,7 @@ export const Cell: FC<CellProps> = ({ children }) => {
     case CellState.hidden:
       return <ClosedFrame />;
     default:
-      return <ClosedFrame />;
+      return <RevealedFrame>{children}</RevealedFrame>;
   }
 };
 
@@ -85,14 +85,6 @@ export const ClosedFrame = styled.div<ClosedFrameProps>`
   border-color: ${({ mouseDown = false }) => (mouseDown ? 'transparent' : 'white #9e9e9e #9e9e9e white')};
   &:hover {
     filter: brightness(1.1);
-  }
-`;
-
-const EmptyFrame = styled(ClosedFrame)`
-  border-color: #dddddddd;
-  cursor: default;
-  &:hover {
-    filter: brightness(1);
   }
 `;
 

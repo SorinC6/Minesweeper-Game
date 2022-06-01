@@ -15,8 +15,8 @@ CellClosed.args = {
   children: 10,
 };
 
-export const CellEmpty = Template.bind({});
-CellClosed.args = {
+export const CellIsEmpty = Template.bind({});
+CellIsEmpty.args = {
   children: 0,
 };
 
@@ -33,4 +33,24 @@ CellWithFlag.args = {
 export const CellWeakFlag = Template.bind({});
 CellWeakFlag.args = {
   children: 12,
+};
+
+export const CellWith1 = Template.bind({});
+CellWith1.args = {
+  children: 1,
+};
+
+export const CellWith3 = Template.bind({});
+CellWith3.args = {
+  children: 3,
+};
+
+export const CellWith5 = Template.bind({});
+CellWith5.args = {
+  children: 5,
+};
+
+export const CellWith8 = Template.bind({});
+CellWith8.args = {
+  children: 8,
 };
