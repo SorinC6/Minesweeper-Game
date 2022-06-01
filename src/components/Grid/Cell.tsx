@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styled from '@emotion/styled';
-import { Cell as CellType } from '@/helpers/Filed';
+import { Cell as CellType, CellState } from '@/helpers/Filed';
 
 export interface CellProps {
   /**
@@ -23,9 +23,15 @@ export interface CellProps {
 
 export const Cell: FC<CellProps> = ({ children }) => {
   switch (children) {
-    case 0:
+    case CellState.empty:
       return <EmptyFrame />;
-    case 10:
+    case CellState.bomb:
+      return (
+        <BombFrame>
+          <Bomb />
+        </BombFrame>
+      );
+    case CellState.hidden:
       return <ClosedFrame />;
     default:
       return <ClosedFrame />;
@@ -35,6 +41,23 @@ export const Cell: FC<CellProps> = ({ children }) => {
 interface ClosedFrameProps {
   mouseDown?: boolean;
 }
+
+const transparent = 'rgba(0,0,0,0)';
+const colors: { [key in CellType]: string } = {
+  0: transparent,
+  1: '#2a48ec',
+  2: '#2bb13d',
+  3: '#ec6561',
+  4: '#233db7',
+  5: '#a6070f',
+  6: '#e400af',
+  7: '#906a02',
+  8: '#fa0707',
+  9: transparent,
+  10: transparent,
+  11: transparent,
+  12: transparent,
+};
 
 export const ClosedFrame = styled.div<ClosedFrameProps>`
   display: flex;
@@ -59,4 +82,24 @@ const EmptyFrame = styled(ClosedFrame)`
   &:hover {
     filter: brightness(1);
   }
+`;
+
+const RevealedFrame = styled(ClosedFrame)`
+  border-color: #dddddd;
+  cursor: default;
+  color: ${({ children }) => colors[children as CellType] ?? transparent};
+  &:hover {
+    filter: brightness(1);
+  }
+`;
+
+const Bomb = styled.div`
+  border-radius: 50%;
+  width: 1vh;
+  height: 1vh;
+  background-color: #333;
+`;
+
+const BombFrame = styled(RevealedFrame)`
+  background-color: #ec433c;
 `;

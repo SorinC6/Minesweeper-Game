@@ -14,7 +14,13 @@ export const CellClosed = Template.bind({});
 CellClosed.args = {
   children: 10,
 };
+
 export const CellEmpty = Template.bind({});
 CellClosed.args = {
   children: 0,
+};
+
+export const CellWithBomb = Template.bind({});
+CellWithBomb.args = {
+  children: 9,
 };
