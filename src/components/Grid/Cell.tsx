@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import styled from '@emotion/styled';
 import { Cell as CellType, CellState, Coords } from '@/helpers/Filed';
+import { useMouseDown } from '@/hooks/useMouseDown';
 
 export interface CellProps {
   /**
@@ -25,6 +26,7 @@ export const checkCellIsActive = (cell: CellType) =>
   [CellState.hidden, CellState.flag, CellState.weakFlag].includes(cell);
 
 export const Cell: FC<CellProps> = ({ children, coords, ...rest }) => {
+  const [mousedown, setMouseDown, setMouseUp] = useMouseDown();
   const isActiveCell = checkCellIsActive(children);
 
   const onClick = () => {
@@ -41,9 +43,25 @@ export const Cell: FC<CellProps> = ({ children, coords, ...rest }) => {
     }
   };
 
+  const onMouseDown = () => {
+    if (isActiveCell) {
+      setMouseDown();
+    }
+  };
+
+  const onMouseUp = () => {
+    if (isActiveCell) {
+      setMouseUp();
+    }
+  };
+
   const props = {
     onClick,
     onContextMenu,
+    onMouseDown,
+    onMouseUp,
+    onMouseLeave: onMouseUp,
+    mousedown,
     'data-testid': `${children}_${coords}`,
   };
 
@@ -55,6 +73,10 @@ interface ComponentsMapProps {
   onClick: (event: React.MouseEvent<HTMLDivElement>) => void;
   onContextMenu: (event: React.MouseEvent<HTMLDivElement>) => void;
   'data-testid'?: string;
+  onMouseDown: () => void;
+  onMouseUp: () => void;
+  onMouseLeave: () => void;
+  mousedown: boolean;
 }
 
 const ComponentsMap: FC<ComponentsMapProps> = ({ children, ...rest }) => {
@@ -85,7 +107,7 @@ const ComponentsMap: FC<ComponentsMapProps> = ({ children, ...rest }) => {
 };
 
 interface ClosedFrameProps {
-  mouseDown?: boolean;
+  mousedown?: boolean;
 }
 
 const transparent = 'rgba(0,0,0,0)';
@@ -116,7 +138,7 @@ export const ClosedFrame = styled.div<ClosedFrameProps>`
   color: transparent;
   background-color: #d1d1d1;
   border: 0.6vh solid transparent;
-  border-color: ${({ mouseDown = false }) => (mouseDown ? 'transparent' : 'white #9e9e9e #9e9e9e white')};
+  border-color: ${({ mousedown = false }) => (mousedown ? 'transparent' : 'white #9e9e9e #9e9e9e white')};
   &:hover {
     filter: brightness(1.1);
   }
