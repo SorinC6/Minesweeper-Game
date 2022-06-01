@@ -31,6 +31,18 @@ export const Cell: FC<CellProps> = ({ children }) => {
           <Bomb />
         </BombFrame>
       );
+    case CellState.flag:
+      return (
+        <ClosedFrame>
+          <Flag />
+        </ClosedFrame>
+      );
+    case CellState.weakFlag:
+      return (
+        <ClosedFrame>
+          <WeakFlag />
+        </ClosedFrame>
+      );
     case CellState.hidden:
       return <ClosedFrame />;
     default:
@@ -65,8 +77,8 @@ export const ClosedFrame = styled.div<ClosedFrameProps>`
   justify-content: center;
   user-select: none;
   cursor: pointer;
-  width: 1.8vh;
-  height: 1.8vh;
+  width: 2.8vh;
+  height: 2.8vh;
   color: transparent;
   background-color: #d1d1d1;
   border: 0.6vh solid transparent;
@@ -95,11 +107,24 @@ const RevealedFrame = styled(ClosedFrame)`
 
 const Bomb = styled.div`
   border-radius: 50%;
-  width: 1vh;
-  height: 1vh;
+  width: 2vh;
+  height: 2vh;
   background-color: #333;
 `;
 
 const BombFrame = styled(RevealedFrame)`
   background-color: #ec433c;
+`;
+
+const Flag = styled.div`
+  width: 0px;
+  height: 0px;
+  color: ${transparent};
+  border-top: 1vh solid transparent;
+  border-bottom: 1vh solid transparent;
+  border-left: 1vh solid #ec433c;
+`;
+
+const WeakFlag = styled(Flag)`
+  border-left: 1vh solid #f19996;
 `;

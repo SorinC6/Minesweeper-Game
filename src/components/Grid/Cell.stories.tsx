@@ -24,3 +24,13 @@ export const CellWithBomb = Template.bind({});
 CellWithBomb.args = {
   children: 9,
 };
+
+export const CellWithFlag = Template.bind({});
+CellWithFlag.args = {
+  children: 11,
+};
+
+export const CellWeakFlag = Template.bind({});
+CellWeakFlag.args = {
+  children: 12,
+};
