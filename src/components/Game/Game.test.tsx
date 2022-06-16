@@ -1,6 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent } from '@testing-library/react';
 
 import { GameOver } from './GameOver';
 
@@ -14,9 +13,9 @@ describe('Game Over test cases', () => {
 
     expect(element).toBeInTheDocument();
 
-    userEvent.click(element);
+    fireEvent.click(element);
 
-    expect(onReset).toHaveBeenCalled();
+    expect(onReset).toBeCalled();
 
     expect(asFragment()).toMatchSnapshot();
   });
@@ -29,7 +28,7 @@ describe('Game Over test cases', () => {
 
     expect(element).toBeInTheDocument();
 
-    userEvent.click(element);
+    fireEvent.click(element);
 
     expect(onReset).toHaveBeenCalled();
 
