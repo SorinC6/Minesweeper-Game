@@ -18,7 +18,7 @@ export interface ScoreboardProps {
    * Action handler when the GameReset button is clicked
    */
   onReset: () => void;
-  onChange: () => void;
+  onChangeLevel?: () => void;
   /**
    * Bombs in the field
    */

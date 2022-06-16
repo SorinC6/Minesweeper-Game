@@ -7,7 +7,7 @@ export interface LegendProps {
    */
   feature: string;
   firstAction: string;
-  secondAction: string;
+  secondAction?: string;
 }
 
 export const Legend: FC<LegendProps> = ({ feature, firstAction, secondAction }) => {

@@ -36,7 +36,7 @@ const App: FC<GameProps> = () => {
           levels={['beginner', 'intermediate', 'expert']}
           mines="010"
           onReset={() => null}
-          onChange={() => null}
+          onChangeLevel={() => null}
         />
         <GameOver onClick={() => null} isWin={false} />
         <Grid onClick={() => null} onContextMenu={() => null}>
