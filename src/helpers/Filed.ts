@@ -27,9 +27,9 @@ export const fieldGenerator = (size: number, probability: number): Field => {
 
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
-      if (restCellsWithBombs === 0) {
-        return result;
-      }
+      // if (restCellsWithBombs === 0) {
+      //   return result;
+      // }
       if (restCellsWithBombs / unprocessedCellsSize > Math.random()) {
         result[i][j] = CellState.bomb;
         incrementNeibours([i, j], result);

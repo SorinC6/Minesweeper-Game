@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import styled from "@emotion/styled";
+import React, { FC } from 'react';
+import styled from '@emotion/styled';
 
 export interface LegendProps {
   /**
@@ -10,17 +10,12 @@ export interface LegendProps {
   secondAction: string;
 }
 
-export const Legend: FC<LegendProps> = ({
-  feature,
-  firstAction,
-  secondAction,
-}) => {
+export const Legend: FC<LegendProps> = ({ feature, firstAction, secondAction }) => {
   return (
     <Parent>
       <strong>{feature}: </strong>
       <FlagComboParent>
-        <FirstAction>{firstAction}</FirstAction> +{" "}
-        <SecondAction>{secondAction}</SecondAction>
+        <FirstAction>{firstAction}</FirstAction> + <SecondAction>{secondAction}</SecondAction>
       </FlagComboParent>
     </Parent>
   );
