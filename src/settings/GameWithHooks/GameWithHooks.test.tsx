@@ -1,5 +1,4 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
 import { render, screen, fireEvent } from '@testing-library/react';
 
 import { GameWithHooks } from './GameWithHooks';
@@ -21,6 +20,7 @@ jest.mock('./useGame', () => ({
     ],
     onClick: mockOnClick,
     onChangeLevel: mockOnChangeLevel,
+
     onReset: mockOnReset,
   }),
 }));

@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { Field, emptyFieldGenerator, CellState, fieldGenerator, Coords } from '@/helpers/Filed';
 import { openCell } from '@/helpers/openCell';
 
-import { LevelNames, GameSettings } from '../settings/GameSettings';
+import { LevelNames, GameSettings } from '../GameSettings';
+import { setFlag } from '@/helpers/setFlag';
 
 interface ReturnType {
   level: LevelNames;
@@ -12,6 +13,7 @@ interface ReturnType {
   settings: [number, number];
   playerField: Field;
   onClick: (coords: Coords) => void;
+  onContextMenu: (coords: Coords) => void;
   onChangeLevel: (level: LevelNames) => void;
   onReset: () => void;
   gameField: Field;
@@ -26,9 +28,15 @@ export const useGame = (): ReturnType => {
   const [playerField, setPlayerField] = useState<Field>(emptyFieldGenerator(size, CellState.hidden));
   const [gameField, setGameField] = useState<Field>(fieldGenerator(size, bombs / (size * size)));
 
+  console.log('gameField', gameField);
+
   const onClick = (coords: Coords) => {
     try {
-      const newPlayerField = openCell(coords, playerField, gameField);
+      const [newPlayerField, isSolved, flagCounter] = openCell(coords, playerField, gameField);
+      if (isSolved) {
+        setIsWin(true);
+        setIsGameOver(true);
+      }
       setPlayerField([...newPlayerField]);
     } catch (error) {
       setPlayerField([...gameField]);
@@ -53,6 +61,15 @@ export const useGame = (): ReturnType => {
 
   const onReset = () => resetHandle([size, bombs]);
 
+  const onContextMenu = (coords: Coords) => {
+    const [newPlayerField, isSolved, flagCounter] = setFlag(coords, playerField, gameField);
+    if (isSolved) {
+      setIsWin(true);
+      setIsGameOver(true);
+    }
+    setPlayerField([...newPlayerField]);
+  };
+
   return {
     level,
     isGameOver,
@@ -63,5 +80,6 @@ export const useGame = (): ReturnType => {
     onChangeLevel,
     onReset,
     gameField,
+    onContextMenu,
   };
 };

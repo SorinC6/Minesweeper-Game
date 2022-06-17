@@ -1,5 +1,6 @@
 import { Coords, Field, CellState } from './Filed';
 import { getNeigboursItems, checkItemInField } from './CellManipulator';
+import { detectWin } from './detectWin';
 
 /**
  * Open cell in the player field using game field info
@@ -8,7 +9,7 @@ import { getNeigboursItems, checkItemInField } from './CellManipulator';
  * @param {Field} gameField
  * @returns {Field}
  */
-export const openCell = (coords: Coords, playerField: Field, gameField: Field): Field => {
+export const openCell = (coords: Coords, playerField: Field, gameField: Field): [Field, boolean, number] => {
   const { empty, hidden, bomb } = CellState;
 
   const [y, x] = coords;
@@ -29,7 +30,7 @@ export const openCell = (coords: Coords, playerField: Field, gameField: Field): 
         const playerCell = playerField[y][x];
 
         if (gameCell === empty && playerCell === hidden) {
-          playerField = openCell([y, x], playerField, gameField);
+          [playerField] = openCell([y, x], playerField, gameField);
         }
 
         if (gameCell < bomb) {
@@ -40,6 +41,7 @@ export const openCell = (coords: Coords, playerField: Field, gameField: Field): 
   }
 
   playerField[y][x] = gameCell;
+  const [isSolved, flagCounter] = detectWin(playerField, gameField);
 
-  return playerField;
+  return [playerField, isSolved, flagCounter];
 };

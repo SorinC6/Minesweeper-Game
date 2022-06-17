@@ -1,3 +1,4 @@
+import { detectWin } from './detectWin';
 import { Coords, Field, CellState } from './Filed';
 
 /**
@@ -5,12 +6,26 @@ import { Coords, Field, CellState } from './Filed';
  * @param {Coords} coords
  * @param {Field} playerField
  * @param {Field} gameField
- * @returns {[Field,FlagCounter]}
+ * @returns {[Field,boolean, number]}
  */
-export const setFlag = (coords: Coords, playerField: Field, gameField: Field): Field => {
+export const setFlag = (coords: Coords, playerField: Field, gameField: Field): [Field, boolean, number] => {
   const [y, x] = coords;
-  con;
-  const { empty, hidden, bomb } = CellState;
+  const cell = playerField[y][x];
+  const { flag, weakFlag, hidden } = CellState;
 
-  return [[]];
+  switch (cell) {
+    case flag:
+      playerField[y][x] = weakFlag;
+      break;
+    case weakFlag:
+      playerField[y][x] = hidden;
+      break;
+    case hidden:
+      playerField[y][x] = flag;
+      break;
+  }
+
+  const [isSolved, flagCounter] = detectWin(playerField, gameField);
+
+  return [playerField, isSolved, flagCounter];
 };
