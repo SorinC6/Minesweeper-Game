@@ -1,58 +1,40 @@
-import React, { FC, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { FC, useState } from 'react';
 
-import { GameLevels, LevelNames } from '@/settings/GameSettings';
-
-import { Scoreboard } from '@/components/Scoreboard';
 import { Grid } from '@/components/Grid';
-import { GameOver } from '@/components/Game';
 
-import { useGame } from './useGame';
+import { Top } from '@/components/Top';
+import { Scoreboard } from '@/components/Scoreboard';
+import { GameArea, Wrapper, GameOver } from '@/components/Game';
+import { Field, emptyFieldGenerator, CellState } from '@/helpers/Filed';
+
+import { GameLevels, LevelNames, GameSettings } from '../GameSettings';
 
 export const GameWithHooks: FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [level, setLevel] = useState<LevelNames>('beginner');
 
-  const urlLevelParam = (searchParams.get('level') || undefined) as LevelNames;
+  const [size, bomb] = GameSettings[level];
 
-  const {
-    level,
-    time,
-    isGameOver,
-    isWin,
-    settings,
-    playerField,
-    flagCounter,
-    onClick,
-    onContextMenu,
-    onChangeLevel,
-    onReset,
-  } = useGame(urlLevelParam);
-
-  const [, bombs] = settings;
-
-  const onChangeLevelHandler = useCallback(
-    ({ target: { value: level } }: React.ChangeEvent<HTMLSelectElement>) => {
-      setSearchParams({ level });
-      onChangeLevel(level as LevelNames);
-    },
-    // Stryker disable next-line ArrayDeclaration
-    []
-  );
+  const playerField = emptyFieldGenerator(size, CellState.hidden);
 
   return (
-    <>
-      <Scoreboard
-        time={String(time)}
-        mines={String(bombs - flagCounter)}
-        levels={GameLevels as unknown as string[]}
-        defaultLevel={level}
-        onChangeLevel={onChangeLevelHandler}
-        onReset={onReset}
-      />
-      {isGameOver && <GameOver onClick={onReset} isWin={isWin} />}
-      <Grid onClick={onClick} onContextMenu={onContextMenu}>
-        {playerField}
-      </Grid>
-    </>
+    <Wrapper>
+      <Top feature="Flag" firstAction="ctrl" secondAction="click">
+        Minesweeper
+      </Top>
+      <GameArea>
+        <Scoreboard
+          time="000"
+          levels={GameLevels as unknown as string[]}
+          mines="010"
+          onReset={() => null}
+          onChangeLevel={({ target: { value } }) => setLevel(value as LevelNames)}
+          defaultLevel={level}
+        />
+        <GameOver onClick={() => null} isWin={false} />
+        <Grid onClick={() => null} onContextMenu={() => null}>
+          {playerField}
+        </Grid>
+      </GameArea>
+    </Wrapper>
   );
 };
