@@ -7,19 +7,47 @@ import { GameWithHooks } from './GameWithHooks';
 const mockOnClick = jest.fn();
 const mockOnChangeLevel = jest.fn();
 const mockOnReset = jest.fn();
-const mockOnContextMenu = jest.fn();
-const mockSetSearchParams = jest.fn();
 
-describe('GAME with hooks tests', () => {
-  test('Render game field by default', () => {
+jest.mock('./useGame', () => ({
+  __esModule: true,
+  useGame: () => ({
+    level: 'beginner',
+    isGameOver: true,
+    isWin: false,
+    settings: [9, 10],
+    playerField: [
+      [10, 10],
+      [10, 10],
+    ],
+    onClick: mockOnClick,
+    onChangeLevel: mockOnChangeLevel,
+    onReset: mockOnReset,
+  }),
+}));
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
+describe('GameWithHooks test cases', () => {
+  it('Render game field by default', () => {
     const { asFragment } = render(<GameWithHooks />);
     expect(asFragment()).toMatchSnapshot();
   });
-
-  test('Change level works fine', () => {
+  it('Cell click works fine', () => {
     render(<GameWithHooks />);
-    userEvent.selectOptions(screen.getByRole('combobox'), 'intermediate');
-    // expect(mockOnChangeLevel).toHaveBeenCalled();
-    // expect(mockSetSearchParams).toHaveBeenCalledWith({ level: 'intermediate' });
+    fireEvent.click(screen.getByTestId('0,0'));
+    expect(mockOnClick).toHaveBeenCalled();
+  });
+  it('Reset handler works fine', () => {
+    render(<GameWithHooks />);
+    fireEvent.click(screen.getByRole('button'));
+    expect(mockOnReset).toHaveBeenCalled();
+  });
+
+  it('Game over reset the game state', () => {
+    render(<GameWithHooks />);
+    fireEvent.click(screen.getByText('🙂'));
+    expect(mockOnReset).toHaveBeenCalled();
   });
 });

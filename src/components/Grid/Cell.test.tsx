@@ -17,7 +17,7 @@ describe('Cell component tests', () => {
       };
       render(<Cell {...props}>{cell}</Cell>);
 
-      const cellComp = screen.getByTestId(`${cell}_${coords}`);
+      const cellComp = screen.getByTestId(`${coords}`);
       const contextMenuEvent = createEvent.contextMenu(cellComp);
 
       fireEvent(cellComp, contextMenuEvent);
@@ -32,7 +32,7 @@ describe('Cell component tests', () => {
       };
       render(<Cell {...props}>{cell}</Cell>);
 
-      const cellComp = screen.getByTestId(`${cell}_${coords}`);
+      const cellComp = screen.getByTestId(`${coords}`);
 
       fireEvent.click(cellComp);
       fireEvent.contextMenu(cellComp);
