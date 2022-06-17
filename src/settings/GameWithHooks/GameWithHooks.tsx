@@ -1,20 +1,35 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useMemo } from 'react';
 
 import { Grid } from '@/components/Grid';
 
 import { Top } from '@/components/Top';
 import { Scoreboard } from '@/components/Scoreboard';
 import { GameArea, Wrapper, GameOver } from '@/components/Game';
-import { Field, emptyFieldGenerator, CellState } from '@/helpers/Filed';
+import { Field, emptyFieldGenerator, CellState, fieldGenerator, Coords } from '@/helpers/Filed';
+import { openCell } from '@/helpers/CellManipulator';
 
 import { GameLevels, LevelNames, GameSettings } from '../GameSettings';
 
 export const GameWithHooks: FC = () => {
   const [level, setLevel] = useState<LevelNames>('beginner');
 
-  const [size, bomb] = GameSettings[level];
+  const [size, bombs] = GameSettings[level];
+  const [playerField, setPlayerField] = useState<Field>(emptyFieldGenerator(size, CellState.hidden));
 
-  const playerField = emptyFieldGenerator(size, CellState.hidden);
+  const gameField = useMemo(() => fieldGenerator(size, bombs / (size * size)), [size, bombs]);
+
+  const onClick = (coords: Coords) => {
+    const newPlayerField = openCell(coords, playerField, gameField);
+    setPlayerField([...newPlayerField]);
+  };
+
+  const onChangeLevel = ({ target: { value: level } }: React.ChangeEvent<HTMLSelectElement>) => {
+    setLevel(level as LevelNames);
+    const [size] = GameSettings[level as LevelNames];
+
+    const newPlayerField = emptyFieldGenerator(size, CellState.hidden);
+    setPlayerField([...newPlayerField]);
+  };
 
   return (
     <Wrapper>
@@ -27,11 +42,11 @@ export const GameWithHooks: FC = () => {
           levels={GameLevels as unknown as string[]}
           mines="010"
           onReset={() => null}
-          onChangeLevel={({ target: { value } }) => setLevel(value as LevelNames)}
+          onChangeLevel={onChangeLevel}
           defaultLevel={level}
         />
         <GameOver onClick={() => null} isWin={false} />
-        <Grid onClick={() => null} onContextMenu={() => null}>
+        <Grid onClick={onClick} onContextMenu={() => null}>
           {playerField}
         </Grid>
       </GameArea>
