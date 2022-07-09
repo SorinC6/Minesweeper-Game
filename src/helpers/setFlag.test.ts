@@ -16,7 +16,7 @@ describe('Set flag action', () => {
       [h, h, h],
     ];
 
-    const [newPlayerField] = setFlag([0, 0], playerField, gameField);
+    const [newPlayerField] = setFlag([0, 0], playerField, gameField, 0, 3);
 
     expect(newPlayerField).toStrictEqual([
       [1, h, h],
@@ -37,7 +37,7 @@ describe('Set flag action', () => {
       [h, h, h],
     ];
 
-    const [playerFieldAfterFirstClick] = setFlag([0, 0], playerField, gameField);
+    const [playerFieldAfterFirstClick] = setFlag([0, 0], playerField, gameField, 0, 3);
 
     expect(playerFieldAfterFirstClick).toStrictEqual([
       [f, h, h],
@@ -45,7 +45,7 @@ describe('Set flag action', () => {
       [h, h, h],
     ]);
 
-    const [playerFieldAfterSecondClick] = setFlag([0, 0], playerField, gameField);
+    const [playerFieldAfterSecondClick] = setFlag([0, 0], playerField, gameField, 0, 3);
 
     expect(playerFieldAfterSecondClick).toStrictEqual([
       [w, h, h],
@@ -53,7 +53,7 @@ describe('Set flag action', () => {
       [h, h, h],
     ]);
 
-    const [playerFieldAfterThirdClick] = setFlag([0, 0], playerField, gameField);
+    const [playerFieldAfterThirdClick] = setFlag([0, 0], playerField, gameField, 0, 3);
 
     expect(playerFieldAfterThirdClick).toStrictEqual([
       [h, h, h],

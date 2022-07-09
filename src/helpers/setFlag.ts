@@ -6,9 +6,17 @@ import { Coords, Field, CellState } from './Filed';
  * @param {Coords} coords
  * @param {Field} playerField
  * @param {Field} gameField
+ * @param {number} prevFlagCounter
+ * @param {number} bombs
  * @returns {[Field,boolean, number]}
  */
-export const setFlag = (coords: Coords, playerField: Field, gameField: Field): [Field, boolean, number] => {
+export const setFlag = (
+  coords: Coords,
+  playerField: Field,
+  gameField: Field,
+  prevFlagCounter: number,
+  bombs: number
+): [Field, boolean, number] => {
   const [y, x] = coords;
   const cell = playerField[y][x];
   const { flag, weakFlag, hidden } = CellState;
@@ -21,7 +29,9 @@ export const setFlag = (coords: Coords, playerField: Field, gameField: Field): [
       playerField[y][x] = hidden;
       break;
     case hidden:
-      playerField[y][x] = flag;
+      if (prevFlagCounter < bombs) {
+        playerField[y][x] = flag;
+      }
       break;
   }
 
