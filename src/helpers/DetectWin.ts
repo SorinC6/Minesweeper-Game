@@ -12,32 +12,33 @@ export const detectWin = (playerField: Field, gameField: Field): [boolean, numbe
   let bombsCounter = 0;
   let flagCounter = 0;
   let detectedBombsCounter = 0;
-  let hiddenCounter = 0;
+  let isFieldHaveHiddenSell = false;
 
   for (const y of gameField.keys()) {
     for (const x of gameField[y].keys()) {
       const gameCell = gameField[y][x];
       const playerCell = playerField[y][x];
-
+      const isPlayerCellFlag = [flag, weakFlag].includes(playerCell);
       if (playerCell === hidden) {
-        hiddenCounter++;
+        isFieldHaveHiddenSell = true;
       }
 
-      if ([flag, weakFlag].includes(playerCell)) {
+      if (isPlayerCellFlag) {
         flagCounter++;
       }
 
       if (gameCell === bomb) {
         bombsCounter++;
 
-        if (playerCell === flag) {
+        if (isPlayerCellFlag) {
           detectedBombsCounter++;
         }
       }
     }
   }
 
-  const isPuzzleSolved = bombsCounter === detectedBombsCounter && hiddenCounter === 0;
+  const isPuzzleSolved =
+    bombsCounter === detectedBombsCounter && flagCounter === bombsCounter && !isFieldHaveHiddenSell;
 
   return [isPuzzleSolved, flagCounter];
 };

@@ -15,6 +15,7 @@ interface ReturnType {
   onClick: (coords: Coords) => void;
   onContextMenu: (coords: Coords) => void;
   onChangeLevel: (level: LevelNames) => void;
+  isGameStarted: boolean;
   onReset: () => void;
   gameField: Field;
   time: number;
@@ -60,14 +61,14 @@ export const useGame = (): ReturnType => {
   const onClick = (coords: Coords) => {
     !isGameStarted && setIsGameStarted(true);
     try {
-      const [newPlayerField, isSolved, flagCounter] = openCell(coords, playerField, gameField);
+      const [newPlayerField, isSolved] = openCell(coords, playerField, gameField);
       if (isSolved) {
         setGameOver(isSolved);
       }
       setPlayerField([...newPlayerField]);
     } catch (error) {
       setPlayerField([...gameField]);
-      setGameOver(false);
+      setGameOver();
     }
   };
 
@@ -113,5 +114,6 @@ export const useGame = (): ReturnType => {
     onReset,
     gameField,
     onContextMenu,
+    isGameStarted,
   };
 };

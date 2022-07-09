@@ -1,4 +1,4 @@
-import { detectWin } from './detectWin';
+import { detectWin } from './DetectWin';
 import { Coords, Field, CellState } from './Filed';
 
 /**
