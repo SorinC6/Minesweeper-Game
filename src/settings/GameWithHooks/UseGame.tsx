@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Field, emptyFieldGenerator, CellState, fieldGenerator, Coords } from '@/helpers/Filed';
 import { openCell } from '@/helpers/openCell';
 
 import { LevelNames, GameSettings } from '../GameSettings';
 import { setFlag } from '@/helpers/setFlag';
+import { useTime } from './useTime';
 
 interface ReturnType {
   level: LevelNames;
@@ -26,32 +27,16 @@ export const useGame = (): ReturnType => {
   const [level, setLevel] = useState<LevelNames>('beginner');
   const [isGameOver, setIsGameOver] = useState(false);
   const [isWin, setIsWin] = useState(false);
-  const [time, setTime] = useState(0);
   const [flagCounter, setFlagCounter] = useState(0);
   const [isGameStarted, setIsGameStarted] = useState(false);
+
+  const [time, resetTime] = useTime(isGameStarted, isGameOver);
 
   const [size, bombs] = GameSettings[level];
   const [playerField, setPlayerField] = useState<Field>(emptyFieldGenerator(size, CellState.hidden));
   const [gameField, setGameField] = useState<Field>(fieldGenerator(size, bombs / (size * size)));
 
   console.log('gameField', gameField);
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-
-    if (isGameStarted) {
-      interval = setTimeout(() => {
-        setTime(time + 1);
-      }, 1000);
-      if (isGameOver) {
-        clearInterval(interval);
-      }
-    }
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [isGameOver, isGameStarted, time]);
 
   const setGameOver = (isSolved = false) => {
     setIsGameOver(true);
@@ -86,7 +71,7 @@ export const useGame = (): ReturnType => {
     setIsGameOver(false);
     setIsWin(false);
     setIsGameStarted(false);
-    setTime(0);
+    resetTime();
   };
 
   const onReset = () => resetHandle([size, bombs]);
