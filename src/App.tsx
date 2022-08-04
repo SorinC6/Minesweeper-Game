@@ -2,12 +2,11 @@ import React, { FC } from 'react';
 import MinesweeperWithHooks from './pages/MinesweeperWithHooks';
 import './app.css';
 
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import { useQuery } from './hooks/useQuery';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate, useSearchParams } from 'react-router-dom';
 
 export const Navigator: FC = () => {
-  const query = useQuery();
-  const level = query.get('level') || '';
+  const [searchParams] = useSearchParams();
+  const level = searchParams.get('level') || '';
 
   const getLocationObjWithSearchParams = (pathname: string): Partial<Location> => ({
     pathname,
@@ -43,14 +42,13 @@ const App: FC = () => {
   return (
     <Router>
       <Navigator />
-      <Switch>
-        <Route path="/game-with-hooks">
-          <MinesweeperWithHooks />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/game-with-hooks" element={<MinesweeperWithHooks />} />
+        <Route path="/game-with-usereducer" element={<MinesweeperWithHooks />} />
+        <Route path="/game-with-reactredux" element={<MinesweeperWithHooks />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </Router>
   );
 };

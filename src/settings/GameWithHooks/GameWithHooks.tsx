@@ -1,18 +1,16 @@
 import React, { FC, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import { Grid } from '@/components/Grid';
 import { Scoreboard } from '@/components/Scoreboard';
 import { GameOver } from '@/components/Game';
 
 import { GameLevels, LevelNames } from '../GameSettings';
-import { useQuery } from '@/hooks/useQuery';
 import { useGame } from './UseGame';
 
 export const GameWithHooks: FC = () => {
-  const history = useHistory();
-  const query = useQuery();
-  const urlLevelParam = (query.get('level') || undefined) as LevelNames;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlLevelParam = (searchParams.get('level') || undefined) as LevelNames;
 
   const {
     level,
@@ -31,9 +29,7 @@ export const GameWithHooks: FC = () => {
   const [, bombs] = settings;
 
   const onChangeLevelHandler = useCallback(({ target: { value: level } }: React.ChangeEvent<HTMLSelectElement>) => {
-    history.push({
-      search: `?${new URLSearchParams({ level }).toString()}`,
-    });
+    setSearchParams({ level });
     onChangeLevel(level as LevelNames);
   }, []);
 
