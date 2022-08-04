@@ -1,16 +1,19 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { Grid } from '@/components/Grid';
-
-import { Top } from '@/components/Top';
 import { Scoreboard } from '@/components/Scoreboard';
-import { GameArea, Wrapper, GameOver } from '@/components/Game';
+import { GameOver } from '@/components/Game';
 
 import { GameLevels, LevelNames } from '../GameSettings';
-
+import { useQuery } from '@/hooks/useQuery';
 import { useGame } from './UseGame';
 
 export const GameWithHooks: FC = () => {
+  const history = useHistory();
+  const query = useQuery();
+  const urlLevelParam = (query.get('level') || undefined) as LevelNames;
+
   const {
     level,
     time,
@@ -23,31 +26,31 @@ export const GameWithHooks: FC = () => {
     onChangeLevel,
     onReset,
     onContextMenu,
-  } = useGame();
+  } = useGame(urlLevelParam);
 
   const [, bombs] = settings;
 
+  const onChangeLevelHandler = useCallback(({ target: { value: level } }: React.ChangeEvent<HTMLSelectElement>) => {
+    history.push({
+      search: `?${new URLSearchParams({ level }).toString()}`,
+    });
+    onChangeLevel(level as LevelNames);
+  }, []);
+
   return (
-    <Wrapper>
-      <Top feature="Flag" firstAction="ctrl" secondAction="click">
-        Minesweeper
-      </Top>
-      <GameArea>
-        <Scoreboard
-          time={String(time)}
-          levels={GameLevels as unknown as string[]}
-          mines={String(bombs - flagCounter)}
-          onReset={onReset}
-          defaultLevel={level}
-          onChangeLevel={({ target: { value: level } }) => {
-            onChangeLevel(level as LevelNames);
-          }}
-        />
-        {isGameOver && <GameOver onClick={() => null} isWin={isWin} />}
-        <Grid onClick={onClick} onContextMenu={onContextMenu}>
-          {playerField}
-        </Grid>
-      </GameArea>
-    </Wrapper>
+    <>
+      <Scoreboard
+        time={String(time)}
+        levels={GameLevels as unknown as string[]}
+        mines={String(bombs - flagCounter)}
+        onReset={onReset}
+        defaultLevel={level}
+        onChangeLevel={onChangeLevelHandler}
+      />
+      {isGameOver && <GameOver onClick={() => null} isWin={isWin} />}
+      <Grid onClick={onClick} onContextMenu={onContextMenu}>
+        {playerField}
+      </Grid>
+    </>
   );
 };

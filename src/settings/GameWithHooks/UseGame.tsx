@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import { Field, emptyFieldGenerator, CellState, fieldGenerator, Coords } from '@/helpers/Filed';
 import { openCell } from '@/helpers/openCell';
@@ -25,15 +25,12 @@ interface ReturnType {
   flagCounter: number;
 }
 
-export const useGame = (): ReturnType => {
-  // const [level, setLevel] = useState<LevelNames>('beginner');
-  // const [size, bombs] = GameSettings[level];
-
+export const useGame = (defaultLevel = 'beginner' as LevelNames): ReturnType => {
   const {
     settings: [size, bombs],
     level,
     setLevel,
-  } = useSettings();
+  } = useSettings(defaultLevel);
 
   const [flagCounter, setFlagCounter] = useState(0);
 
@@ -46,19 +43,22 @@ export const useGame = (): ReturnType => {
 
   console.log('gameField', gameField);
 
-  const onClick = (coords: Coords) => {
-    !isGameStarted && setInProgress();
-    try {
-      const [newPlayerField, isSolved] = openCell(coords, playerField, gameField);
-      if (isSolved) {
-        setGameWin();
+  const onClick = useCallback(
+    (coords: Coords) => {
+      !isGameStarted && setInProgress();
+      try {
+        const [newPlayerField, isSolved] = openCell(coords, playerField, gameField);
+        if (isSolved) {
+          setGameWin();
+        }
+        setPlayerField([...newPlayerField]);
+      } catch (error) {
+        setPlayerField([...gameField]);
+        setGameLoose();
       }
-      setPlayerField([...newPlayerField]);
-    } catch (error) {
-      setPlayerField([...gameField]);
-      setGameLoose();
-    }
-  };
+    },
+    [isGameStarted, isGameOver, isWin, level, flagCounter]
+  );
 
   const onChangeLevel = (level: LevelNames) => {
     const newSettings = setLevel(level);
@@ -74,7 +74,7 @@ export const useGame = (): ReturnType => {
     resetTime();
   };
 
-  const onReset = () => resetHandle([size, bombs]);
+  const onReset = useCallback(() => resetHandle([size, bombs]), [size, bombs]);
 
   const onContextMenu = (coords: Coords) => {
     !isGameStarted && setInProgress();
