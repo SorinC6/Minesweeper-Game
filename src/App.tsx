@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import MinesweeperWithHooks from './pages/MinesweeperWithHooks';
+import { MinesweeperWithRedux } from './pages/';
 import './app.css';
 
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useSearchParams } from 'react-router-dom';
@@ -46,7 +47,7 @@ const App: FC = () => {
         <Route path="/" element={<Home />} />
         <Route path="/game-with-hooks" element={<MinesweeperWithHooks />} />
         <Route path="/game-with-usereducer" element={<MinesweeperWithHooks />} />
-        <Route path="/game-with-reactredux" element={<MinesweeperWithHooks />} />
+        <Route path="/game-with-reactredux" element={<MinesweeperWithRedux />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>

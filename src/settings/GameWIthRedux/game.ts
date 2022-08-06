@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Field, CellState, generateFieldWithDefaultState, fieldGenerator, Coords } from '@/core/Field';
-import { LevelNames, GameSettings } from '@/modules/GameSettings';
-import { openCell as openCellHandler } from '@/core/openCell';
-import { setFlag } from '@/core/setFlag';
+import { Field, CellState, generateFieldWithDefaultState, fieldGenerator, Coords } from '@/helpers/Filed';
+import { LevelNames, GameSettings } from '../GameSettings';
+import { openCell as openCellHandler } from '@/helpers/openCell';
+import { setFlag } from '@/helpers/setFlag';
 
 export interface State {
   level: LevelNames;
