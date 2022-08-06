@@ -43,7 +43,7 @@ export const GameWithHooks: FC = () => {
         defaultLevel={level}
         onChangeLevel={onChangeLevelHandler}
       />
-      {isGameOver && <GameOver onClick={() => null} isWin={isWin} />}
+      {isGameOver && <GameOver onClick={onReset} isWin={isWin} />}
       <Grid onClick={onClick} onContextMenu={onContextMenu}>
         {playerField}
       </Grid>
