@@ -1,9 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, ThunkAction, AnyAction } from '@reduxjs/toolkit';
 
 import { Field, CellState, generateFieldWithDefaultState, fieldGenerator, Coords } from '@/helpers/Filed';
-import { LevelNames, GameSettings } from '../GameSettings';
+import { LevelNames, GameSettings } from '@/settings/GameSettings';
 import { openCell as openCellHandler } from '@/helpers/openCell';
 import { setFlag } from '@/helpers/setFlag';
+import { RootState } from '@/store';
 
 export interface State {
   level: LevelNames;
@@ -12,13 +13,14 @@ export interface State {
   isGameOver: boolean;
   isGameStarted: boolean;
   isWin: boolean;
+  isTimerRunning: boolean;
   settings: [number, number];
   playerField: Field;
   gameField: Field;
   flagCounter: number;
 }
 
-export const getInitialState = (level = 'beginner' as LevelNames): State => {
+export const getInitialState = (level: LevelNames = 'beginner'): State => {
   const settings = GameSettings[level];
   const [size, bombs] = settings;
 
@@ -29,6 +31,7 @@ export const getInitialState = (level = 'beginner' as LevelNames): State => {
     isGameOver: false,
     isGameStarted: false,
     isWin: false,
+    isTimerRunning: false,
     settings,
     flagCounter: 0,
     playerField: generateFieldWithDefaultState(size, CellState.hidden),
@@ -36,7 +39,7 @@ export const getInitialState = (level = 'beginner' as LevelNames): State => {
   };
 };
 
-export const { reducer, actions } = createSlice({
+export const gameSlice = createSlice({
   name: 'game',
   initialState: getInitialState(),
   reducers: {
@@ -65,7 +68,36 @@ export const { reducer, actions } = createSlice({
       state.flagCounter = newFlagCounter;
       state.playerField = newPlayerField;
     },
+    updateTime: (state) => {
+      state.time = state.time + 1;
+    },
+    setTimerActive: (state) => {
+      state.isTimerRunning = true;
+    },
     reset: ({ level }) => getInitialState(level),
     changeLevel: (state, { payload }: PayloadAction<LevelNames>) => getInitialState(payload),
   },
 });
+
+export const { actions, reducer } = gameSlice;
+
+export const recursiveUpdate =
+  (prevGameField: Field): ThunkAction<void, RootState, unknown, AnyAction> =>
+  (dispatch, getState) =>
+    setTimeout(() => {
+      const { isGameStarted, isTimerRunning, gameField } = getState().game;
+      const isTheSameGame = gameField === prevGameField;
+
+      if (isGameStarted && isTimerRunning && isTheSameGame) {
+        dispatch(actions.updateTime());
+        dispatch(recursiveUpdate(gameField));
+      }
+    }, 1000);
+
+export const runTimer = (): ThunkAction<void, RootState, unknown, AnyAction> => (dispatch, getState) => {
+  const { isGameStarted, isTimerRunning, gameField } = getState().game;
+  if (isGameStarted && !isTimerRunning) {
+    dispatch(actions.setTimerActive());
+    dispatch(recursiveUpdate(gameField));
+  }
+};

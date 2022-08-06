@@ -1,6 +1,11 @@
 import React, { FC } from 'react';
-import MinesweeperWithHooks from './pages/MinesweeperWithHooks';
-import { MinesweeperWithRedux } from './pages/';
+import { MinesweeperWithHooks } from './pages/MinesweeperWithHooks';
+import { MinesweeperWithUseReducer } from './pages/MinesweeperWithUseReducer/MinesweeperWithUseReducer';
+import { MinesweeperWithReactRedux } from './pages/MinesweeperWithReactRedux';
+
+import { store } from '@/store';
+import { Provider } from 'react-redux';
+
 import './app.css';
 
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useSearchParams } from 'react-router-dom';
@@ -23,10 +28,7 @@ export const Navigator: FC = () => {
     <nav>
       <ul>
         <li>
-          <Link to={getLocationObjWithSearchParams('/')}>Home</Link>{' '}
-        </li>
-        <li>
-          <Link to={getLocationObjWithSearchParams('/game-with-hooks')}>Game With Hooks</Link>{' '}
+          <Link to={getLocationObjWithSearchParams('/')}>Game With Hooks</Link>{' '}
         </li>
         <li>
           <Link to={getLocationObjWithSearchParams('/game-with-usereducer')}>Game With useReducer</Link>
@@ -41,19 +43,18 @@ export const Navigator: FC = () => {
 
 const App: FC = () => {
   return (
-    <Router>
-      <Navigator />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/game-with-hooks" element={<MinesweeperWithHooks />} />
-        <Route path="/game-with-usereducer" element={<MinesweeperWithHooks />} />
-        <Route path="/game-with-reactredux" element={<MinesweeperWithRedux />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Navigator />
+        <Routes>
+          <Route path="/" element={<MinesweeperWithHooks />} />
+          <Route path="/game-with-usereducer" element={<MinesweeperWithUseReducer />} />
+          <Route path="/game-with-reactredux" element={<MinesweeperWithReactRedux />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </Router>
+    </Provider>
   );
 };
 
 export default App;
-
-const Home = () => <h2>Home for game</h2>;

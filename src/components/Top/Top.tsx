@@ -5,14 +5,12 @@ import { GameName, GameNameProps } from './GameName';
 
 export type TopComponentType = LegendProps & GameNameProps;
 
-export const Top: FC<TopComponentType> = memo(({ children, ...legendProps }) => {
-  return (
-    <Header>
-      <GameName>{children}</GameName>
-      <Legend {...legendProps} />
-    </Header>
-  );
-});
+export const Top: FC<LegendProps> = memo(({ children, ...legendProps }) => (
+  <Header>
+    <GameName>{children}</GameName>
+    <Legend {...legendProps} />
+  </Header>
+));
 
 Top.displayName = 'Top';
 

@@ -3,11 +3,19 @@ import styled from '@emotion/styled';
 
 export interface LegendProps {
   /**
-   *  Component action props
+   * Feature that should be activated after first+second actions
    */
   feature: string;
+  /**
+   * First action
+   */
   firstAction: string;
+  /**
+   * Second action
+   */
   secondAction?: string;
+
+  children?: any;
 }
 
 export const Legend: FC<LegendProps> = ({ feature, firstAction, secondAction }) => {

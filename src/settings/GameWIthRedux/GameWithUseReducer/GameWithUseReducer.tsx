@@ -1,25 +1,40 @@
 import React, { FC, useReducer, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import { Coords } from '@/helpers/Filed';
 
-import { GameLevels, LevelNames } from '../GameSettings';
-
+import { GameLevels, LevelNames } from '@/settings/GameSettings';
 import { Scoreboard } from '@/components/Scoreboard';
 import { Grid } from '@/components/Grid';
 import { GameOver } from '@/components/Game';
 
-import { reducer, actions, getInitialState } from './game';
+import { reducer, actions, getInitialState } from '@/settings/GameWIthRedux/game';
 
-export const GameWithRedux: FC = () => {
+export const GameWithUseReducer: FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlLevelParam = (searchParams.get('level') || undefined) as LevelNames;
+
   const [{ level, time, isGameOver, isWin, settings, playerField, flagCounter }, dispatch] = useReducer(
     reducer,
-    getInitialState()
+    getInitialState(urlLevelParam)
   );
 
   const [, bombs] = settings;
 
   const onClick = useCallback(
-    (coords: Coords) => dispatch(actions.openCell(coords)),
+    (coords: Coords) => {
+      dispatch(actions.openCell(coords));
+      dispatch(runTimer());
+    },
+    // Stryker disable next-line ArrayDeclaration
+    []
+  );
+
+  const onContextMenu = useCallback(
+    (coords: Coords) => {
+      dispatch(actions.setFlag(coords));
+      dispatch(runTimer());
+    },
     // Stryker disable next-line ArrayDeclaration
     []
   );
@@ -30,15 +45,11 @@ export const GameWithRedux: FC = () => {
     []
   );
 
-  const onContextMenu = useCallback(
-    (coords: Coords) => dispatch(actions.setFlag(coords)),
-    // Stryker disable next-line ArrayDeclaration
-    []
-  );
-
   const onChangeLevel = useCallback(
-    ({ target: { value: level } }: React.ChangeEvent<HTMLSelectElement>) =>
-      dispatch(actions.changeLevel(level as LevelNames)),
+    ({ target: { value: level } }: React.ChangeEvent<HTMLSelectElement>) => {
+      setSearchParams({ level });
+      dispatch(actions.changeLevel(level as LevelNames));
+    },
     // Stryker disable next-line ArrayDeclaration
     []
   );
