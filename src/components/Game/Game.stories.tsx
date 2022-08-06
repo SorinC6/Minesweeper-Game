@@ -2,7 +2,7 @@ import React from 'react';
 import { Story, Meta } from '@storybook/react';
 
 import { Field } from '@/helpers/Filed';
-import { fieldGenerator } from '@/helpers/mocks';
+import { fieldGenerator } from '@/helpers/__mocks__';
 
 import { Grid } from '@/components/Grid';
 import { Top } from '@/components/Top';
