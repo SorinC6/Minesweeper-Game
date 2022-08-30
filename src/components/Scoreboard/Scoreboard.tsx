@@ -42,7 +42,7 @@ export const Scoreboard: FC<ScoreboardProps> = ({
 }) => (
   <Wrapper>
     <Counter>{time}</Counter>
-    <div>
+    <div style={{ display: 'flex' }}>
       <Level onChange={onChange} value={defaultLevel}>
         {levels}
       </Level>
